@@ -1,0 +1,20 @@
+#Open R and import glossopterisdata.csv
+glossopterisdata <-  read.csv("https://raw.githubusercontent.com/marioesperancajr/glossopteris/master/glossopterisdata.txt")
+
+#Load package car
+library(car)
+
+#Fit the model
+model <- lm(vd~x+y+z, data=glossopterisdata)
+
+#Insert your data in veins per cm
+mydata <- data.frame(x = 15, y = 23, z = 18)
+
+#Bootstrap the data (wait for processing)
+bootstrap <- Boot(model, function(x)predict(x, mydata), R=9999)
+
+#Calculate the confidence interval
+confidence <- Confint(bootstrap, level=.95, type="bca")
+
+#Here is the result
+confidence
